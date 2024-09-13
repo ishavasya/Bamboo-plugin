@@ -7,6 +7,9 @@
         <param name="plugin-logo">images/pluginLogo.png</param>
 		<param name="vendor-logo">images/vendorLogo.png</param>
         <param name="vendor-icon">images/vendorIcon.png</param>
+        <param name="atlassian-data-center-status">compatible</param>
+        <param name="atlassian-data-center-compatible">true</param>
+        <param name="plugin-type">data-center</param>
     </plugin-info>
 
     <!-- add our i18n resource -->

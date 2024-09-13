@@ -1,12 +1,9 @@
 package com.leapwork.leapwork_integration_for_bamboo.impl;
-
 import com.atlassian.bamboo.collections.ActionParametersMap;
 import com.atlassian.bamboo.task.AbstractTaskConfigurator;
 import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.util.TextProviderUtils;
-import com.atlassian.util.concurrent.NotNull;
-
-
+import org.jetbrains.annotations.NotNull; //import com.atlassian.util.concurrent.NotNull;
 import java.util.ArrayList;
 import java.util.Map;
 
