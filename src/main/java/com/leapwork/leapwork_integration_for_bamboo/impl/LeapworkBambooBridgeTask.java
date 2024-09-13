@@ -39,6 +39,7 @@ public class LeapworkBambooBridgeTask implements TaskType {
 
 		// get fields value
 		final String leapworkHostname = taskContext.getConfigurationMap().get("leapworkHostname");
+		final String leapworkHttps = taskContext.getConfigurationMap().get("leapworkHttps");
 		final String leapworkPort = taskContext.getConfigurationMap().get("leapworkPort");
 		final String leapworkAccessKey = taskContext.getConfigurationMap().get("leapworkAccessKey");
 		final String leapworkDelay = taskContext.getConfigurationMap().get("leapworkDelay");
@@ -58,21 +59,19 @@ public class LeapworkBambooBridgeTask implements TaskType {
 		final LinkedHashMap<String, Integer> repeatedNameMapCounter = new LinkedHashMap<>();
 
 		ArrayList<String> rawScheduleList = pluginHandler.getRawScheduleList(leapworkSchIds, leapworkSchNames);
-		printPluginInputs(leapworkHostname, leapworkPort, leapworkDelay, leapworkDoneStatusAs, leapworkReport,
+		printPluginInputs(leapworkHostname, leapworkHttps, leapworkPort, leapworkDelay, leapworkDoneStatusAs, leapworkReport,
 				leapworkSchNames, leapworkSchIds, leapworkScheduleVariables,
 				String.valueOf(leapworkWritePassedFlowKeyFrames), buildLogger);
 
-		String controllerApiHttpAddress = pluginHandler.getControllerApiHttpAdderess(leapworkHostname, leapworkPort,
-				buildLogger);
+		boolean isHttpsEnabled = Utils.defaultBooleanIfNull(leapworkHttps, false);
+		String controllerApiHttpAddress = pluginHandler.getControllerApiHttpAdderess(leapworkHostname, isHttpsEnabled, leapworkPort, buildLogger);
 
 		int timeDelay = pluginHandler.getTimeDelay(leapworkDelay, buildLogger);
 		boolean isAutoReportEnabled = Utils.defaultBooleanIfNull(leapworkAutoReport, false);
 		boolean isDoneStatusAsSuccess = pluginHandler.isDoneStatusAsSuccess(leapworkDoneStatusAs);
-		boolean writePassedKeyframes = pluginHandler
-				.isLeapworkWritePassedFlowKeyFrames(leapworkWritePassedFlowKeyFrames);
+		boolean writePassedKeyframes = pluginHandler.isLeapworkWritePassedFlowKeyFrames(leapworkWritePassedFlowKeyFrames);
 
-		String scheduleVariablesRequestPart = pluginHandler.getScheduleVariablesRequestPart(leapworkScheduleVariables,
-				buildLogger);
+		String scheduleVariablesRequestPart = pluginHandler.getScheduleVariablesRequestPart(leapworkScheduleVariables, buildLogger);
 
 		AsyncHttpClient mainClient = new AsyncHttpClient();
 		try {
@@ -305,7 +304,7 @@ public class LeapworkBambooBridgeTask implements TaskType {
 		}
 	}
 
-	private void printPluginInputs(String leapworkHostname, String leapworkPort, String leapworkDelay,
+	private void printPluginInputs(String leapworkHostname, String leapworkHttps, String leapworkPort, String leapworkDelay,
 			String leapworkDoneStatusAs, String leapworkReport, String leapworkSchNames, String leapworkSchIds,
 			String leapworkScheduleVariables, String leapworkWritePassedFlowKeyFrames, final BuildLogger buildLogger) {
 		String[] Names = leapworkSchNames.split(PluginHandler.scheduleSeparatorRegex);
@@ -314,6 +313,7 @@ public class LeapworkBambooBridgeTask implements TaskType {
 		buildLogger.addBuildLogEntry(Messages.INPUT_VALUES_MESSAGE);
 		buildLogger.addBuildLogEntry(Messages.CASE_CONSOLE_LOG_SEPARATOR);
 		buildLogger.addBuildLogEntry(String.format(Messages.INPUT_HOSTNAME_VALUE, leapworkHostname));
+		buildLogger.addBuildLogEntry(String.format(Messages.INPUT_HTTPS, leapworkHttps));
 		buildLogger.addBuildLogEntry(String.format(Messages.INPUT_PORT_VALUE, leapworkPort));
 		buildLogger.addBuildLogEntry(String.format(Messages.INPUT_REPORT_VALUE, leapworkReport));
 		buildLogger.addBuildLogEntry(Messages.INPUT_SCHEDULE_NAMES_VALUE);

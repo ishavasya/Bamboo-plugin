@@ -10,7 +10,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -108,23 +107,43 @@ public final class PluginHandler {
 		return doneStatusAs.contentEquals("Success");
 	}
 
-	public String getControllerApiHttpAdderess(String hostname, String rawPort, final BuildLogger buildLogger) {
+	public String getControllerApiHttpAdderess(String hostname, boolean isHttpsEnabled, String rawPort, final BuildLogger buildLogger) {
 		StringBuilder stringBuilder = new StringBuilder();
-		int port = getPortNumber(rawPort, buildLogger);
-		stringBuilder.append("http://").append(hostname).append(":").append(port);
+		int port = getPortNumber(rawPort, isHttpsEnabled, buildLogger);
+		if(isHttpsEnabled){
+			stringBuilder.append("https://").append(hostname).append(":").append(port);
+		}
+		else{
+			stringBuilder.append("http://").append(hostname).append(":").append(port);
+		}
+		
 		return stringBuilder.toString();
 	}
 
-	private int getPortNumber(String rawPortStr, final BuildLogger buildLogger) {
-		int defaultPortNumber = 9001;
+	private int getPortNumber(String rawPortStr, boolean isHttpsEnabled, final BuildLogger buildLogger) {
+		int defaultPortNumber;
+		int defaultHttpPortNumber = 9001;
+		int defaultHttpsPortNumber = 9002;
 		try {
 			if (!rawPortStr.isEmpty() || !"".equals(rawPortStr))
 				return Integer.parseInt(rawPortStr);
 			else {
+				if(isHttpsEnabled){
+					defaultPortNumber = defaultHttpsPortNumber;
+				}
+				else{
+					defaultPortNumber = defaultHttpPortNumber;
+				}
 				buildLogger.addErrorLogEntry(String.format(Messages.PORT_NUMBER_IS_INVALID, defaultPortNumber));
 				return defaultPortNumber;
 			}
 		} catch (Exception e) {
+			if(isHttpsEnabled){
+				defaultPortNumber = defaultHttpsPortNumber;
+			}
+			else{
+				defaultPortNumber = defaultHttpPortNumber;
+			}
 			buildLogger.addErrorLogEntry(String.format(Messages.PORT_NUMBER_IS_INVALID, defaultPortNumber));
 			return defaultPortNumber;
 		}
