@@ -1,6 +1,6 @@
 [@ww.textfield labelKey="leapwork.hostname.label" name="leapworkHostname" id="leapworkHostname" required=true style="max-width: 350px; "/]
-[@ww.checkbox labelKey="leapwork.https.label" name="leapworkHttps" toggle="true" descriptionKey="leapwork.https.description" /]
 [@ww.textfield labelKey="leapwork.port.label" name="leapworkPort" id="leapworkPort" required=true style="max-width: 80px; "/]
+[@ww.checkbox labelKey="leapwork.https.label" name="leapworkHttps" toggle="true" descriptionKey="leapwork.https.description" /]
 [@ww.textfield labelKey="leapwork.accessKey.label" name="leapworkAccessKey" id="leapworkAccessKey" required=true style="max-width: 350px; "/]
 [@ww.textfield labelKey="leapwork.delay.label" name="leapworkDelay" id="leapworkDelay" required=false style="width: 80px;"/]
 [@ww.select cssClass="builderSelectWidget" labelKey='leapwork.doneStatusAs.label' name='leapworkDoneStatusAs' list="statuses" id="leapworkDoneStatusAs" emptyOption=false style="width: 80px;"/]
